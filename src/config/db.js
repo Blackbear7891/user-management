@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const connectDB = (uri) => {
+const connectDB = (url) => {
   try {
-    mongoose.connect(uri);
+    mongoose.connect(url);
     console.log("Database connected");
   } catch (error) {
     console.log(error);
