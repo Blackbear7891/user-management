@@ -1,23 +1,12 @@
 import { Type } from "@sinclair/typebox";
 import Ajv from "ajv";
-import addFormats from "ajv-formats";
 import addErrors from "ajv-errors";
-import {
-  emailDTOSchema,
-  idDTOSchema,
-  nameDOTSchema,
-  passwordDTOSchema,
-  surnameDTOSchema,
-} from "../lib/dto.types.js";
+import { passwordDTOSchema } from "../lib/dto.types.js";
 
 const ajv = new Ajv({ allErrors: true });
 
-const registerDTOSchema = Type.Object(
+const UnregisterDTOSchema = Type.Object(
   {
-    _id: idDTOSchema,
-    name: nameDOTSchema,
-    surname: surnameDTOSchema,
-    email: emailDTOSchema,
     password: passwordDTOSchema,
   },
   {
@@ -29,13 +18,12 @@ const registerDTOSchema = Type.Object(
 );
 
 ajv.addFormat("password", /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/);
-addFormats(ajv, ["email", "uuid"]);
 addErrors(ajv);
 
-const validateSchema = ajv.compile(registerDTOSchema);
+const validateSchema = ajv.compile(UnregisterDTOSchema);
 
 // Middleware para validar los datos de usuario
-const userRegisterDTO = (req, res, next) => {
+const userUnregisterDTO = (req, res, next) => {
   const isDTOValid = validateSchema(req.body);
   if (!isDTOValid)
     return res.status(400).send({
@@ -44,4 +32,4 @@ const userRegisterDTO = (req, res, next) => {
   next();
 };
 
-export default userRegisterDTO;
+export default userUnregisterDTO;
